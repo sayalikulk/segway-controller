@@ -1,0 +1,83 @@
+## Read all the input system verilog files
+
+read_file -format sverilog { ./Segway.sv\
+			     ./Auth_blk.sv\
+                             ./UART_rx.sv\
+                             ./inert_intf.sv\
+                             ./SPI_mnrch.sv\
+                             ./inertial_integrator.sv\
+                             ./balance_cntrl.sv\
+                             ./SegwayMath.sv\
+                             ./PID.sv\
+                             ./steer_en.sv\
+                             ./steer_en_SM.sv\
+                             ./mtr_drv.sv\
+                             ./PWM11.sv\
+                             ./A2D_Intf.sv\
+                             ./piezo_drv.sv\
+                             ./rst_synch.sv }
+
+## Set the top level
+
+set current_design Segway
+
+## Create a 3ns clock
+
+create_clock -name "clk" -period 3 {clk}
+
+## Don't touch the clk or rst_n ports
+
+set_dont_touch_network [find port clk]
+set_dont_touch_network [get_net iRST/rst_n]
+
+## Define primary inputs
+
+set prim_inputs [remove_from_collection [all_inputs] [find port clk]]
+set prim_inputs [remove_from_collection [all_inputs] [find port RST_n]]
+
+## Define input delay - 0.25ns
+
+set_input_delay -clock clk 0.25 $prim_inputs
+
+## Set driving strength to be equivalent to a 2X2 NAND gate
+
+set_driving_cell -lib_cell NAND2X2_RVT -library saed32rvt_tt0p85v25c $prim_inputs
+
+## Define output delays - 0.35ns
+
+set_output_delay -clock clk 0.35 [all_outputs]
+
+## Set 50 fF load on all outputs
+
+set_load 50 [all_outputs]
+
+## Define wireload model - 16000 square micron model
+
+set_wire_load_model -name 16000 -library saed32rvt_tt0p85v25c
+
+## Define max transition time
+
+set_max_transition 0.1 [current_design]
+
+## Define clock uncertainty 
+set_clock_uncertainty 0.15 clk
+
+## Compile, flatten and recompile
+
+compile -map_effort medium
+
+ungroup -all -flatten
+set_fix_hold clk
+
+compile -map_effort high
+compile -incremental_mapping -map_effort high
+
+## Generate reports
+
+report_timing -delay max > max_delay.rpt
+report_timing -delay min > min_delay.rpt
+report_area > area.rpt
+
+## Write gate level verilog file
+
+write -format verilog Segway -output Segway.vg
