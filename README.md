@@ -1,6 +1,6 @@
 # ECE 551 — Segway Control System  
-< ALL THANKS TO THE INSTRUCTORS: PROFESSOR HOFFMAN AND HSIAO > <br>
-**Concise Project README**  
+ALL THANKS TO THE INSTRUCTORS: PROFESSOR HOFFMAN AND HSIAO <br>
+
 Fall 2025
 
 This project implements the digital control logic for a self-balancing “Segway-like” platform using SystemVerilog. The FPGA controls motor drive, inertial sensing, rider detection, steering, BLE authentication, battery monitoring, and audible warnings.
