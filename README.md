@@ -19,6 +19,9 @@ The FPGA synthesizable design includes:
 - Piezo driver for alerts (too-fast, battery-low, steering-enabled)
 - Motor driver (PWM + over-current protection)
 
+<img width="720" height="312" alt="image" src="https://github.com/user-attachments/assets/56e1808a-8369-4e98-afc3-d48e8e73f1ca" />
+
+
 ## 2. Synthesizable Modules
 
 - `Segway.sv` (top-level)
@@ -49,6 +52,11 @@ Simulation models (non-synthesizable) provided:
 - `'G' (0x47)` → enable (`pwr_up`)
 - `'S' (0x53)` → disable if rider has stepped off
 
+<img width="557" height="163" alt="image" src="https://github.com/user-attachments/assets/5911075f-a0cf-4d88-b9b6-a2df5e86758c" />
+
+<img width="426" height="223" alt="image" src="https://github.com/user-attachments/assets/0365a2aa-0bbc-4d77-acd5-7ef9e70589f9" />
+
+
 ### **Piezo Driver**
 - `too_fast`: looping 3-note warning  
 - `batt_low`: reversed fanfare every 3s  
@@ -67,7 +75,10 @@ Round-robin reading of:
 - Left load cell (ch 0)  
 - Right load cell (ch 4)  
 - Steering pot (ch 5)  
-- Battery (ch 6)  
+- Battery (ch 6)
+
+<img width="666" height="350" alt="image" src="https://github.com/user-attachments/assets/6d1f359c-87d9-4699-8280-eb7e87fd1270" />
+
 
 Two SPI transfers per reading (command + data).
 
